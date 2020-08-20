@@ -1,0 +1,1 @@
+https://app.pluralsight.com/player?course=sql-server-platform-designing-data-warehouse&author=ana-voicu&name=fac5147a-ef87-4b4f-b70c-f9a4d84d7e8f&clip=6&mode=live
