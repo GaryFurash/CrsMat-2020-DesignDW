@@ -7,14 +7,14 @@ DROP DATABASE [HappyScoopers_Demo]
 GO
 CREATE DATABASE [HappyScoopers_Demo]
  CONTAINMENT = NONE
- ON  PRIMARY 
+ ON  PRIMARY
  /***********
-ATTENTION: 
-Replace the string {LOCAL_PATH} with an existing path on your machine, where you want to create the database
+ATTENTION:
+Replace the string C:\Data with an existing path on your machine, where you want to create the database
 ***********/
-( NAME = N'HappyScoopers_Demo', FILENAME = N'{LOCAL_PATH}\HappyScoopers_Demo.mdf' , SIZE = 270336KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
- LOG ON 
-( NAME = N'HappyScoopers_Demo_log', FILENAME = N'{LOCAL_PATH}\HappyScoopers_Demo_log.ldf' , SIZE = 401408KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+( NAME = N'HappyScoopers_Demo', FILENAME = N'C:\Data\HappyScoopers_Demo.mdf' , SIZE = 270336KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON
+( NAME = N'HappyScoopers_Demo_log', FILENAME = N'C:\Data\HappyScoopers_Demo_log.ldf' , SIZE = 401408KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
 GO
 IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
 begin
@@ -334,23 +334,23 @@ BEGIN
 
 --SELECT @LastLoadDate, @NewLoadDate
 
-SELECT 
+SELECT
 	 'HSD|' + CONVERT(NVARCHAR, cus.[CustomerID])						AS [_SourceKey],
 	CONVERT(nvarchar(100),ISNULL(cus.[FirstName], 'N/A'))				AS [First Name],
 	CONVERT(nvarchar(100),ISNULL(cus.[LastName], 'N/A'))				AS [Last Name],
 	CONVERT(nvarchar(200),ISNULL(cus.[FullName], 'N/A'))				AS [Full Name],
-	CONVERT(nvarchar(30), ISNULL(cus.[Title], 'N/A'))					AS [Title], 
-	CONCAT_WS('|', 'HSD', 
+	CONVERT(nvarchar(30), ISNULL(cus.[Title], 'N/A'))					AS [Title],
+	CONCAT_WS('|', 'HSD',
 		CONVERT(nvarchar(5), ISNULL(dcou.CountryID, 0)),
 		CONVERT(nvarchar(5), ISNULL(dprv.ProvinceID, 0)),
-		CONVERT(nvarchar(5), ISNULL(dcit.CityID, 0)), 
+		CONVERT(nvarchar(5), ISNULL(dcit.CityID, 0)),
 		CONVERT(nvarchar(5), ISNULL(dadr.AddressID, 0)))				AS [Delivery Location Key],
-	CONCAT_WS('|', 'HSD', 
+	CONCAT_WS('|', 'HSD',
 		CONVERT(nvarchar(5), ISNULL(bcou.CountryID, 0)),
 		CONVERT(nvarchar(5), ISNULL(bprv.ProvinceID, 0)),
-		CONVERT(nvarchar(5), ISNULL(bcit.CityID, 0)), 
+		CONVERT(nvarchar(5), ISNULL(bcit.CityID, 0)),
 		CONVERT(nvarchar(5), ISNULL(badr.AddressID, 0)))				AS [Billing Location Key],
-	CONVERT(nvarchar(24), ISNULL(cus.[PhoneNumber], 'N/A'))				AS [Phone Number], 
+	CONVERT(nvarchar(24), ISNULL(cus.[PhoneNumber], 'N/A'))				AS [Phone Number],
 	CONVERT(nvarchar(100),ISNULL(cus.[Email], 'N/A'))					AS [Email],
 		CONVERT(datetime, ISNULL([cus].ModifiedDate, '1753-01-01'))		AS [Customer Modified Date],
 		CONVERT(datetime, ISNULL([dadr].ModifiedDate, '1753-01-01'))	AS [Delivery Addr Modified Date],
@@ -363,7 +363,7 @@ SELECT
                              ) AS [maxModifiedDate](t)
                            )											AS [Valid From],
 	CONVERT(datetime, '9999-12-31')										AS [Valid To]
-FROM	
+FROM
 	[HappyScoopers_Demo].[dbo].[Customers] cus
 	LEFT JOIN [HappyScoopers_Demo].[dbo].[Addresses] badr on cus.BillingAddressID = badr.AddressID
 	LEFT JOIN [HappyScoopers_Demo].[dbo].[Cities] bcit on badr.CityID = bcit.CityID
@@ -374,10 +374,10 @@ FROM
 	LEFT JOIN [HappyScoopers_Demo].[dbo].[Provinces] dprv on dcit.ProvinceID = dprv.ProvinceID
 	LEFT JOIN [HappyScoopers_Demo].[dbo].[Countries] dcou on dprv.CountryID = dcou.CountryID
 
-WHERE 
+WHERE
 	([cus].ModifiedDate > @LastLoadDate AND [cus].ModifiedDate <= @NewLoadDate) OR
 	([badr].ModifiedDate > @LastLoadDate AND [badr].ModifiedDate <= @NewLoadDate) OR
-	([dadr].ModifiedDate > @LastLoadDate AND [dadr].ModifiedDate <= @NewLoadDate) 
+	([dadr].ModifiedDate > @LastLoadDate AND [dadr].ModifiedDate <= @NewLoadDate)
 
 
     RETURN 0;
@@ -399,12 +399,12 @@ BEGIN
 
 --SELECT @LastLoadDate, @NewLoadDate
 
-SELECT 
+SELECT
 	 'HSD|' + CONVERT(NVARCHAR, emp.[EmployeeID])				AS [_SourceKey]
-	,	CONCAT_WS('|', 'HSD', 
+	,	CONCAT_WS('|', 'HSD',
 		CONVERT(nvarchar(5), ISNULL(cou.CountryID, 0)),
 		CONVERT(nvarchar(5), ISNULL(prv.ProvinceID, 0)),
-		CONVERT(nvarchar(5), ISNULL(cit.CityID, 0)), 
+		CONVERT(nvarchar(5), ISNULL(cit.CityID, 0)),
 		CONVERT(nvarchar(5), ISNULL(adr.AddressID, 0)))			AS [Location Key]
 	,CONVERT(nvarchar(100),emp.LastName)						AS [Last Name]
 	,CONVERT(nvarchar(100),emp.FirstName)						AS [First Name]
@@ -431,9 +431,9 @@ LEFT JOIN [HappyScoopers_Demo].[dbo].[Addresses] [adr] ON emp.AddressID = adr.Ad
 LEFT JOIN [HappyScoopers_Demo].[dbo].Cities [cit] ON adr.CityID = cit.CityID
 LEFT JOIN [HappyScoopers_Demo].[dbo].Provinces [prv] ON cit.ProvinceID = prv.ProvinceID
 LEFT JOIN [HappyScoopers_Demo].[dbo].Countries [cou] ON prv.CountryID = cou.CountryID
-WHERE 
+WHERE
 	([emp].ModifiedDate > @LastLoadDate AND [emp].ModifiedDate <= @NewLoadDate) OR
-	([adr].ModifiedDate > @LastLoadDate AND [adr].ModifiedDate <= @NewLoadDate) 
+	([adr].ModifiedDate > @LastLoadDate AND [adr].ModifiedDate <= @NewLoadDate)
 
     RETURN 0;
 END;
@@ -454,17 +454,17 @@ BEGIN
 
 --SELECT @LastLoadDate, @NewLoadDate
 
-SELECT 
-	CONCAT_WS('|', 'HSD', 
+SELECT
+	CONCAT_WS('|', 'HSD',
 		CONVERT(nvarchar(5), ISNULL(cou.CountryID, 0)),
 		CONVERT(nvarchar(5), ISNULL(prv.ProvinceID, 0)),
-		CONVERT(nvarchar(5), ISNULL(cit.CityID, 0)), 
+		CONVERT(nvarchar(5), ISNULL(cit.CityID, 0)),
 		CONVERT(nvarchar(5), ISNULL(adr.AddressID, 0)))						AS [_SourceKey],
 	CONVERT(nvarchar(200),ISNULL(cou.Continent, 'N/A'))						AS [Continent],
 	CONVERT(nvarchar(200),ISNULL(cou.Region, 'N/A'))						AS [Region],
 	CONVERT(nvarchar(200),ISNULL(cou.Subregion, 'N/A'))						AS [Subregion],
-	CONVERT(nvarchar(200), ISNULL(cou.CountryCode, 'N/A'))					AS [Country Code], 
-	CONVERT(nvarchar(200), ISNULL(cou.CountryName, 'N/A'))					AS [Country], 
+	CONVERT(nvarchar(200), ISNULL(cou.CountryCode, 'N/A'))					AS [Country Code],
+	CONVERT(nvarchar(200), ISNULL(cou.CountryName, 'N/A'))					AS [Country],
 	CONVERT(nvarchar(200),ISNULL(cou.FormalName, 'N/A'))					AS [Country Formal Name],
 	ISNULL(CONVERT(bigint,cou.Population), -1)								AS [Country Population],
 	CONVERT(nvarchar(200),ISNULL(prv.ProvinceCode, 'N/A'))					AS [Province Code],
@@ -488,16 +488,16 @@ SELECT
                              ) AS [maxModifiedDate](t)
                            )												AS [ValidFrom],
 	CONVERT(datetime, '9999-12-31')											AS [ValidTo]
-FROM	
-	[HappyScoopers_Demo].[dbo].[Addresses] adr 
+FROM
+	[HappyScoopers_Demo].[dbo].[Addresses] adr
 	FULL JOIN [HappyScoopers_Demo].[dbo].[Cities] cit on adr.CityID = cit.CityID
 	FULL JOIN [HappyScoopers_Demo].[dbo].[Provinces] prv on cit.ProvinceID = prv.ProvinceID
 	FULL JOIN [HappyScoopers_Demo].[dbo].[Countries] cou on prv.CountryID = cou.CountryID
-WHERE 
+WHERE
 	([adr].ModifiedDate > @LastLoadDate AND [adr].ModifiedDate <= @NewLoadDate) OR
 	([cit].ModifiedDate > @LastLoadDate AND [cit].ModifiedDate <= @NewLoadDate) OR
 	([prv].ModifiedDate > @LastLoadDate AND [prv].ModifiedDate <= @NewLoadDate) OR
-	([cou].ModifiedDate > @LastLoadDate AND [cou].ModifiedDate <= @NewLoadDate) 
+	([cou].ModifiedDate > @LastLoadDate AND [cou].ModifiedDate <= @NewLoadDate)
 
 
     RETURN 0;
@@ -519,16 +519,16 @@ BEGIN
 
 --SELECT @LastLoadDate, @NewLoadDate
 
-SELECT 
+SELECT
 	 'HSD|' + CONVERT(NVARCHAR, pay.[PaymentTypeID])				AS [_SourceKey],
 	CONVERT(nvarchar(100),ISNULL(pay.[PaymentTypeName], 'N/A'))		AS [Payment Type Name],
 	CONVERT(datetime, ISNULL(pay.[ModifiedDate], '1753-01-01'))		AS [ValidFrom],
 	CONVERT(datetime, '9999-12-31')									AS [ValidTo]
-FROM	
+FROM
 	[HappyScoopers_Demo].[dbo].[PaymentTypes] pay
 
-WHERE 
-	([pay].ModifiedDate > @LastLoadDate AND [pay].ModifiedDate <= @NewLoadDate) 
+WHERE
+	([pay].ModifiedDate > @LastLoadDate AND [pay].ModifiedDate <= @NewLoadDate)
 
     RETURN 0;
 END;
@@ -549,7 +549,7 @@ BEGIN
 
 --SELECT @LastLoadDate, @NewLoadDate
 
-SELECT 
+SELECT
 	 'HSD|' + CONVERT(NVARCHAR, prod.[ProductID])			AS [_SourceKey]
 	,CONVERT(nvarchar(200), prod.[ProductName])				AS [Product Name]
 	,CONVERT(nvarchar(50), prod.[ProductCode])				AS [Product Code]
@@ -563,7 +563,7 @@ SELECT
 	,CONVERT(nvarchar(10), CASE prod.[Discontinued]
 		WHEN 1 THEN 'Yes'
 		ELSE 'No'
-	 END)													AS [Discontinued] 
+	 END)													AS [Discontinued]
 	,CONVERT(datetime, ISNULL([prod].ModifiedDate, '1753-01-01'))	AS [Product Modified Date]
 	,CONVERT(datetime, ISNULL([subcat].ModifiedDate, '1753-01-01'))	AS [Subcategory Modified Date]
 	,CONVERT(datetime, ISNULL([cat].ModifiedDate, '1753-01-01'))	AS [Category Modified Date]
@@ -585,7 +585,7 @@ LEFT JOIN [HappyScoopers_Demo].[dbo].[ProductSubcategories] subcat ON prod.Subca
 LEFT JOIN [HappyScoopers_Demo].[dbo].[ProductCategories] cat ON subcat.ProductCategoryID = cat.CategoryID
 LEFT JOIN [HappyScoopers_Demo].[dbo].[ProductDepartments] dep ON cat.DepartmentID = dep.DepartmentID
 LEFT JOIN [HappyScoopers_Demo].[dbo].[UnitsOfMeasure] um ON prod.UnitOfMeasureID = um.UnitOfMeasureID
-WHERE 
+WHERE
 	([prod].ModifiedDate > @LastLoadDate AND [prod].ModifiedDate <= @NewLoadDate) OR
 	([subcat].ModifiedDate > @LastLoadDate AND [subcat].ModifiedDate <= @NewLoadDate) OR
 	([cat].ModifiedDate > @LastLoadDate AND [cat].ModifiedDate <= @NewLoadDate) OR
@@ -611,21 +611,21 @@ BEGIN
 
 --SELECT @LastLoadDate, @NewLoadDate
 
-SELECT 
+SELECT
 	 'HSD|' + CONVERT(NVARCHAR, pro.[PromotionID])					AS [_SourceKey],
 	CONVERT(nvarchar(100),ISNULL(pro.[DealDescription], 'N/A'))		AS [Deal Description],
 	CONVERT(date,ISNULL(pro.[StartDate], '1753-01-01'))				AS [Start Date],
 	CONVERT(date,ISNULL(pro.[EndDate], '1753-01-01'))				AS [End Date],
-	CONVERT(decimal(18,2), ISNULL(pro.[DiscountAmount], 0))			AS [Discount Amount], 
-	CONVERT(decimal(18,3), ISNULL(pro.[DiscountPercentage], 0))		AS [Discount Percentage], 
+	CONVERT(decimal(18,2), ISNULL(pro.[DiscountAmount], 0))			AS [Discount Amount],
+	CONVERT(decimal(18,3), ISNULL(pro.[DiscountPercentage], 0))		AS [Discount Percentage],
 	CONVERT(datetime, ISNULL(pro.[ModifiedDate], '1753-01-01'))		AS [Promotion Modified Date],
 	CONVERT(datetime, ISNULL(pro.[ModifiedDate], '1753-01-01'))		AS [ValidFrom],
 	CONVERT(datetime, '9999-12-31')									AS [ValidTo]
-FROM	
+FROM
 	[HappyScoopers_Demo].[dbo].[Promotions] pro
 
-WHERE 
-	([pro].ModifiedDate > @LastLoadDate AND [pro].ModifiedDate <= @NewLoadDate) 
+WHERE
+	([pro].ModifiedDate > @LastLoadDate AND [pro].ModifiedDate <= @NewLoadDate)
 
     RETURN 0;
 END;
@@ -656,7 +656,7 @@ BEGIN
 		   prv.ProvinceID											AS [_SourceDeliveryProvinceKey],
 		   cit.CityID												AS [_SourceDeliveryCityKey],
 		   adr.AddressID											AS [_SourceDeliveryAddressKey],
-		   CONCAT_WS('|', cou.CountryID, 
+		   CONCAT_WS('|', cou.CountryID,
 			prv.ProvinceID,
 			cit.CityID,
 			adr.AddressID)											AS [_SourceDeliveryLocationKey],
@@ -669,11 +669,11 @@ BEGIN
            orl.Quantity * orl.UnitPrice								AS [Total Excluding VAT],
 		   orl.Quantity * orl.UnitPrice * ISNULL(orl.VATRate, 0.20) AS [VAT Amount],
 		   orl.Quantity*orl.UnitPrice*(1+ ISNULL(orl.VATRate, 0.20)) AS [Total Including VAT],
-           CASE 
-			WHEN orl.ModifiedDate > ord.ModifiedDate 
-				THEN orl.ModifiedDate 
+           CASE
+			WHEN orl.ModifiedDate > ord.ModifiedDate
+				THEN orl.ModifiedDate
 			ELSE ord.ModifiedDate END								AS [ModifiedDate]
-    FROM 
+    FROM
 		[HappyScoopers_Demo].[dbo].[Orders] ord
 		LEFT JOIN [HappyScoopers_Demo].[dbo].[OrderLines] orl ON ord.OrderID = orl.OrderID
 	    LEFT JOIN [HappyScoopers_Demo].[dbo].[Customers] cus ON ord.CustomerID = cus.CustomerID
@@ -684,15 +684,15 @@ BEGIN
 	    LEFT JOIN [HappyScoopers_Demo].[dbo].[Employees] emp ON ord.EmployeeID = emp.EmployeeID
         LEFT JOIN [HappyScoopers_Demo].[dbo].[PaymentTypes] pmt ON ord.PaymentTypeID = pmt.PaymentTypeID
 		LEFT JOIN [HappyScoopers_Demo].[dbo].[Products] prd ON orl.ProductID = prd.ProductID
-		LEFT JOIN [HappyScoopers_Demo].[dbo].[PackageTypes] pck ON orl.PackageTypeID = pck.PackageTypeID 
+		LEFT JOIN [HappyScoopers_Demo].[dbo].[PackageTypes] pck ON orl.PackageTypeID = pck.PackageTypeID
 		LEFT JOIN [HappyScoopers_Demo].[dbo].[Promotions] pro ON orl.PromotionID = pro.PromotionID
-WHERE 
+WHERE
 	([ord].ModifiedDate > @LastLoadDate AND [ord].ModifiedDate <= @NewLoadDate) OR
-	([orl].ModifiedDate > @LastLoadDate AND [orl].ModifiedDate <= @NewLoadDate) 
+	([orl].ModifiedDate > @LastLoadDate AND [orl].ModifiedDate <= @NewLoadDate)
 
 
     RETURN 0;
 END;
 GO
-ALTER DATABASE [HappyScoopers_Demo] SET READ_WRITE 
+ALTER DATABASE [HappyScoopers_Demo] SET READ_WRITE
 GO

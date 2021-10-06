@@ -7,12 +7,12 @@ CREATE DATABASE [HappyScoopers_DW]
  ON  PRIMARY 
  /***********
 ATTENTION!
-	Before you execute the script, replace the string {LOCAL_PATH} with an existing path on your machine
+	Before you execute the script, replace the string C:\Data with an existing path on your machine
 	This path is the location where you want to create the database
 ***********/
-( NAME = N'HappyScoopers_DW', FILENAME = N'{LOCAL_PATH}\HappyScoopers_DW.mdf' , SIZE = 1581056KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+( NAME = N'HappyScoopers_DW', FILENAME = N'C:\Data\HappyScoopers_DW.mdf' , SIZE = 1581056KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
  LOG ON 
-( NAME = N'HappyScoopers_DW_log', FILENAME = N'{LOCAL_PATH}\HappyScoopers_DW_log.ldf' , SIZE = 7610368KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+( NAME = N'HappyScoopers_DW_log', FILENAME = N'C:\Data\HappyScoopers_DW_log.ldf' , SIZE = 7610368KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
 GO
 ALTER DATABASE [HappyScoopers_DW] SET COMPATIBILITY_LEVEL = 140
 GO

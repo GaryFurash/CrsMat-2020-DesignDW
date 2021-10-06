@@ -23,9 +23,3 @@ SELECT * FROM [dbo].[Dim_Product]
 SELECT * FROM [int].[Lineage] ORDER BY [StartLoad] DESC
 SELECT * FROM [int].[IncrementalLoads]
 
-
-
-
-
-
-
